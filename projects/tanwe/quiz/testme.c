@@ -6,7 +6,7 @@
 #define NUM_CHAR	9
 #define MAX_STR		10
 
-
+//Input character pool
 const char charArr[NUM_CHAR] = {
 	'[',
 	'(',
@@ -19,11 +19,13 @@ const char charArr[NUM_CHAR] = {
 	']'
 };
 
+//Simply return character from pool
 char inputChar(void)
 {
     return charArr[rand()%9];
 }
 
+//Return 5-char string with lowercase alphabet
 char *inputString(void)
 {
     char* tempStr;
