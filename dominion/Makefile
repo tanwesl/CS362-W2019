@@ -1,4 +1,5 @@
-CFLAGS= -g -Wall -fpic -coverage -lm -std=c99
+CFLAGS= -Wall -fpic -coverage -lm -std=c99
+COVERAGE= -fprofile-arcs -ftest-coverage -O0
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -20,6 +21,23 @@ testBuyCard: testDrawCard.c dominion.o rngs.o
 
 testAll: dominion.o testSuite.c
 	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
+
+testUtils: randTestUtils.h randTestUtils.c
+	gcc -c randTestUtils.c $(CFLAGS)
+
+randomTest: dominion.o rngs.o randTestUtils.o
+	gcc -o randomtestcard1 randomtestcard1.c dominion.o rngs.o randTestUtils.o $(CFLAGS) $(COVERAGE)
+	./randomtestcard1 &> randomtestresults.out
+	gcov -f dominion.c >> randomtestresults.out
+	cat dominion.c.gcov >> randomtestresults.out
+	gcc -o randomtestcard2 randomtestcard2.c dominion.o rngs.o randTestUtils.o $(CFLAGS) $(COVERAGE)
+	./randomtestcard2 >> randomtestresults.out
+	gcov -f dominion.c >> randomtestresults.out
+	cat dominion.c.gcov >> randomtestresults.out
+	gcc -o randomtestadventurer randomtestadventurer.c dominion.o rngs.o randTestUtils.o $(CFLAGS) $(COVERAGE)
+	./randomtestadventurer >> randomtestresults.out
+	gcov -f dominion.c >> randomtestresults.out
+	cat dominion.c.gcov >> randomtestresults.out
 
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
